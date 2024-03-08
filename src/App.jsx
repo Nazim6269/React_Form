@@ -22,6 +22,7 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const { isValid, errors } = chechValidity(formState);
     if (isValid) {
       console.log(isValid);
@@ -32,6 +33,7 @@ function App() {
 
   const chechValidity = (formState) => {
     const { title, bio, skills } = formState;
+
     const errors = {};
 
     if (!title) {
@@ -59,26 +61,29 @@ function App() {
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <InputGroup
             value={formState.title}
-            name={"name"}
+            name={"title"}
             placeholder={"Eneter your Name"}
             label={"Title"}
             onChange={handleChange}
+            error={errors.title}
           />
 
           <InputGroup
             value={formState.bio}
-            name={"name"}
+            name={"bio"}
             placeholder={"Eneter your Name"}
             label={"Bio"}
             onChange={handleChange}
+            error={errors.bio}
           />
 
           <InputGroup
             value={formState.skills}
-            name={"name"}
+            name={"skills"}
             placeholder={"Eneter your Name"}
             label={"Skills"}
             onChange={handleChange}
+            error={errors.skills}
           />
           <Button type="submit">Submit</Button>
         </div>

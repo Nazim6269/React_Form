@@ -13,6 +13,7 @@ const InputGroup = ({ label, error, name, placeholder, onChange }) => {
         id={name}
         placeholder={placeholder}
         onChange={onChange}
+        error={error}
       />
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </Container>
