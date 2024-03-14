@@ -9,17 +9,36 @@ const initialFormState = {
   bio: "",
   skills: "",
 };
+
+//app component starts from here
 function App() {
   const [formState, setFormState] = useState({ ...initialFormState });
   const [errors, setErrors] = useState({ ...initialFormState });
+  const [focuses, setFocuses] = useState({
+    title: false,
+    bio: false,
+    skills: false,
+  });
 
+  //handle changel funciton
   const handleChange = (e) => {
     setFormState((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
+
+    const key = e.target.name;
+    const { errors } = chechValidity(formState);
+
+    if (!errors[key]) {
+      setErrors((prev) => ({
+        ...prev,
+        [key]: "",
+      }));
+    }
   };
 
+  //handle submit function
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -31,6 +50,33 @@ function App() {
     }
   };
 
+  //handle focus function
+  const handleFocus = (e) => {
+    setFocuses((prev) => ({
+      ...prev,
+      [e.target.name]: true,
+    }));
+  };
+
+  //handle Blur function
+  const handleBlur = (e) => {
+    const key = e.target.name;
+    const { errors } = chechValidity(formState);
+
+    if (errors[key] && focuses[key]) {
+      setErrors((prev) => ({
+        ...prev,
+        [key]: errors[key],
+      }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        [key]: "",
+      }));
+    }
+  };
+
+  //check validity function
   const chechValidity = (formState) => {
     const { title, bio, skills } = formState;
 
@@ -65,6 +111,8 @@ function App() {
             placeholder={"Eneter your Name"}
             label={"Title"}
             onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             error={errors.title}
           />
 
@@ -74,6 +122,8 @@ function App() {
             placeholder={"Eneter your Name"}
             label={"Bio"}
             onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             error={errors.bio}
           />
 
@@ -83,6 +133,8 @@ function App() {
             placeholder={"Eneter your Name"}
             label={"Skills"}
             onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             error={errors.skills}
           />
           <Button type="submit">Submit</Button>
