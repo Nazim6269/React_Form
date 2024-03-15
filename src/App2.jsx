@@ -61,7 +61,12 @@ function App() {
     if (isValid) {
       console.log(isValid);
     } else {
-      console.log(errors);
+      const oldState = deepClone(state);
+      Object.keys(oldState).forEach((key) => {
+        oldState[key].error = errors[key];
+      });
+
+      setState(oldState);
     }
   };
 
