@@ -1,7 +1,10 @@
-export const mapValuesToState = (obj) => {
+import { isObjEmpty } from "../utils/objectUtils";
+
+//map values to state function
+export const mapValuesToState = (obj, shouldClear = false) => {
   return Object.keys(obj).reduce((acc, cur) => {
     acc[cur] = {
-      value: obj[cur],
+      value: shouldClear ? "" : obj[cur],
       error: "",
       focused: false,
       touched: false,
@@ -11,23 +14,32 @@ export const mapValuesToState = (obj) => {
   }, {});
 };
 
+//map state to keys function
+export const mapStateToKeys = (state, key) => {
+  return Object.keys(state).reduce((acc, cur) => {
+    acc[cur] = state[cur][key];
+    return acc;
+  }, {});
+};
+
 //getErrors function
-export const getErrors = () => {
+export const getErrors = (state, validate) => {
   let hasError = null,
     errors = null;
 
-  const values = mapStateToKeys(state, "values");
+  const values = mapStateToKeys(state, "value");
 
   if (typeof validate === "boolean") {
     hasError = validate;
     errors = mapStateToKeys(state, "error");
   } else if (typeof validate === "function") {
-    const { errors: errorsFromCB } = validate(values);
+    const errorsFromCB = validate(values);
     hasError = !isObjEmpty(errorsFromCB);
     errors = errorsFromCB;
   } else {
     throw new Error("validate property must be boolean or function");
   }
+  console.log(errors);
 
   return {
     values,

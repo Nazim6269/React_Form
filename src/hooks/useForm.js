@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getErrors, mapValuesToState } from "../helper/helper";
+import { getErrors, mapStateToKeys, mapValuesToState } from "../helper/helper";
 import { deepClone } from "../utils/objectUtils";
 
 /**
@@ -13,7 +13,7 @@ import { deepClone } from "../utils/objectUtils";
  * @returns
  */
 
-const useForm = ({ init }) => {
+const useForm = ({ init, validate }) => {
   const [state, setState] = useState(mapValuesToState(init));
 
   //handleChange function
@@ -24,7 +24,7 @@ const useForm = ({ init }) => {
     oldState[key].value = value;
 
     const values = mapStateToKeys(oldState, "value");
-    const { errors } = checkValidity(values);
+    const { errors } = getErrors(state, validate);
 
     if (oldState[key].touched && errors[key]) {
       oldState[key].error = errors[key];
@@ -41,17 +41,20 @@ const useForm = ({ init }) => {
     const { name } = e.target;
 
     const oldState = deepClone(state);
-    oldState[name].touched = true;
+    oldState[name].focused = true;
 
     if (!oldState[name].touched) {
       oldState[name].touched = true;
     }
+
+    setState(oldState);
   };
 
   //handleBlur function
   const handleBlur = (e) => {
     const key = e.target.name;
-    const { errors } = getErrors();
+    const { errors } = getErrors(state, validate);
+
     const oldState = deepClone(state);
 
     if (oldState[key].touched && errors[key]) {
@@ -67,8 +70,8 @@ const useForm = ({ init }) => {
   //handleSubmit funciton
   const handleSubmit = (e, cb) => {
     e.preventDefault();
-    const { hasError, errors, values } = getErrors();
-
+    const { hasError, errors, values } = getErrors(state, validate);
+    console.log(errors);
     cb({
       hasError,
       errors,
@@ -78,8 +81,19 @@ const useForm = ({ init }) => {
     });
   };
 
+  //clear function
+  const clear = () => {
+    const newState = mapValuesToState(init, true);
+    setState(newState);
+  };
+
   return {
     formState: state,
+    handleChange,
+    handleBlur,
+    handleFocus,
+    handleSubmit,
+    clear,
   };
 };
 
