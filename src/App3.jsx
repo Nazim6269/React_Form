@@ -1,5 +1,6 @@
 import React from "react";
 import InputGroup from "./Components/shared/InputGroup";
+import Task from "./Components/task/Task";
 import Button from "./Components/ui/button/Button";
 import useForm from "./hooks/useForm";
 
@@ -43,6 +44,8 @@ const App3 = () => {
   });
 
   const cb = (hasError, errors, values) => {
+    //TODO: here errors is undefined
+    console.log("i am inside cb", errors);
     if (hasError) {
       alert("[ERROR]", JSON.stringify(errors));
     } else {
@@ -52,8 +55,11 @@ const App3 = () => {
 
   return (
     <div>
-      My Custom hook form{" "}
-      <form onSubmit={(e) => handleSubmit(e, cb)}>
+      <h2 style={{ textAlign: "center" }}> My Custom hook form </h2>
+      <form
+        style={{ width: "18rem", margin: "0 auto" }}
+        onSubmit={(e) => handleSubmit(e, cb)}
+      >
         <InputGroup
           value={state.firstName.value}
           label={"First Name"}
@@ -98,11 +104,13 @@ const App3 = () => {
           onFocus={handleFocus}
         />
 
-        <Button type="reset" onClick={clear}>
+        <Button type="reset" onClick={clear} style={{ marginRight: "4px" }}>
           Clear
         </Button>
         <Button type="submit">Submit</Button>
       </form>
+      <hr />
+      <Task />
     </div>
   );
 };

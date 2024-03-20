@@ -7,8 +7,6 @@ import { deepClone } from "../utils/objectUtils";
  * @typedef {Object} Param
  * @property {Object} init
  * @property {(Object | boolean)} validate
- *
- *
  * @param {Param} param
  * @returns
  */
@@ -18,10 +16,15 @@ const useForm = ({ init, validate }) => {
 
   //handleChange function
   const handleChange = (e) => {
-    const { name: key, value } = e.target;
+    const { name: key, value, type, checked } = e.target;
 
     const oldState = deepClone(state);
-    oldState[key].value = value;
+    if (type === "checkbox") {
+      oldState[key].value = checked;
+    } else {
+      oldState[key].value = value;
+    }
+    // oldState[key].value = value;
 
     const values = mapStateToKeys(oldState, "value");
     const { errors } = getErrors(state, validate);
@@ -71,7 +74,7 @@ const useForm = ({ init, validate }) => {
   const handleSubmit = (e, cb) => {
     e.preventDefault();
     const { hasError, errors, values } = getErrors(state, validate);
-    console.log(errors);
+    console.log("errors", errors);
     cb({
       hasError,
       errors,

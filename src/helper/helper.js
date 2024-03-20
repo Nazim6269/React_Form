@@ -26,7 +26,7 @@ export const mapStateToKeys = (state, key) => {
 export const getErrors = (state, validate) => {
   let hasError = null,
     errors = null;
-
+  // console.log("validate", validate);
   const values = mapStateToKeys(state, "value");
 
   if (typeof validate === "boolean") {
@@ -39,7 +39,6 @@ export const getErrors = (state, validate) => {
   } else {
     throw new Error("validate property must be boolean or function");
   }
-  console.log(errors);
 
   return {
     values,
