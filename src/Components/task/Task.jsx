@@ -6,6 +6,7 @@ const init = {
   text: "",
   checked: false,
   group: "home",
+  priority: "low",
 };
 
 const Task = () => {
@@ -33,6 +34,31 @@ const Task = () => {
           value={formState.text.value}
           onChange={handleChange}
         />
+        <select name="group" onChange={handleChange}>
+          <option value="home">Home</option>
+          <option value="office">Office</option>
+        </select>
+        <input
+          type="radio"
+          name="priority"
+          value={"low"}
+          onChange={handleChange}
+        />
+        Low
+        <input
+          type="radio"
+          name="priority"
+          value={"medium"}
+          onChange={handleChange}
+        />
+        Medium
+        <input
+          type="radio"
+          name="priority"
+          value={"high"}
+          onChange={handleChange}
+        />
+        High
         <Button>submit</Button>
       </form>
     </div>
